@@ -2,7 +2,7 @@
 
 namespace Spatie\MediaLibrary\UrlGenerator;
 
-use Spatie\MediaLibrary\Exceptions\UrlCouldNotBeDetermined;
+use Illuminate\Support\Facades\Storage;
 
 class LocalUrlGenerator extends BaseUrlGenerator implements UrlGenerator
 {
@@ -10,18 +10,9 @@ class LocalUrlGenerator extends BaseUrlGenerator implements UrlGenerator
      * Get the url for the profile of a media item.
      *
      * @return string
-     *
-     * @throws \Spatie\MediaLibrary\Exceptions\UrlCouldNotBeDetermined
      */
-    public function getUrl()
-    {
-        if (!string($this->getStoragePath())->startsWith(public_path())) {
-            throw new UrlCouldNotBeDetermined('The storage path is not part of the public path');
-        }
-
-        $url = $this->getBaseMediaDirectory().'/'.$this->getPathRelativeToRoot();
-
-        return $this->makeCompatibleForNonUnixHosts($url);
+    public function getUrl() {
+        return Storage::disk( $this->media->disk )->url( $this->getPathRelativeToRoot() );
     }
 
     /**
@@ -59,16 +50,20 @@ class LocalUrlGenerator extends BaseUrlGenerator implements UrlGenerator
     }
 
     /**
-     * @param string $url
+     * Get the path to the requested file relative to the root of the media directory.
      *
      * @return string
      */
-    protected function makeCompatibleForNonUnixHosts($url)
-    {
-        if (DIRECTORY_SEPARATOR != '/') {
-            $url = str_replace(DIRECTORY_SEPARATOR, '/', $url);
+    public function getPathRelativeToRoot() {
+        if ( is_null( $this->conversion ) ) {
+            return $this->pathGenerator->getPath( $this->media ) . $this->media->file_name;
         }
 
-        return $url;
+        $converted = $this->pathGenerator->getPathForConversions( $this->media ) .
+                     $this->conversion->getName() . '.' . $this->conversion->getResultExtension( $this->media->extension );
+
+        return Storage::disk( $this->media->disk )->exists( $converted )
+            ? $converted
+            : $this->pathGenerator->getPath( $this->media ) . $this->media->file_name;
     }
 }
