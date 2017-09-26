@@ -232,7 +232,7 @@ trait HasMediaTrait
     {
         $this->getMedia($collectionName, [])
             ->filter(function ($currentMediaItem) use ($newMediaArray) {
-                return !in_array($currentMediaItem->id, collect($newMediaArray)->lists('id')->toArray());
+                return !in_array($currentMediaItem->id, collect($newMediaArray)->pluck('id')->toArray());
             })
             ->map(function ($media) {
                 $media->delete();
@@ -312,7 +312,7 @@ trait HasMediaTrait
     /**
      * Determines if the media files should be preserved when the media object gets deleted.
      *
-     * @return \Spatie\MediaLibrary\Media
+     * @return \Spatie\MediaLibrary\Media | bool
      */
     public function shouldDeletePreservingMedia()
     {
