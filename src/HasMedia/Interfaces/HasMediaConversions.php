@@ -7,9 +7,9 @@ interface HasMediaConversions extends HasMedia
     /**
      * Register the conversions that should be performed.
      *
-     * @param Spatie\MediaLibrary\Media $media
+     * @param $media
      *
      * @return array
      */
-    public function registerMediaConversions(Spatie\MediaLibrary\Media $media);
+    public function registerMediaConversions($media);
 }
