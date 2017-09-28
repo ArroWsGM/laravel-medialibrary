@@ -66,7 +66,7 @@ class ConversionCollection extends Collection
         $model = new $modelName();
 
         if ($model instanceof HasMediaConversions) {
-            $model->registerMediaConversions();
+            $model->registerMediaConversions($media);
         }
 
         $this->items = $model->mediaConversions;
