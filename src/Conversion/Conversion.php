@@ -251,7 +251,7 @@ class Conversion
      */
     public function setFormat($format)
     {
-        $validFormats = ['jpg', 'png', 'gif'];
+        $validFormats = ['jpg', 'pjpg', 'png', 'gif'];
 
         if (!in_array($format, $validFormats)) {
             throw new InvalidConversionParameter($format.' is not a valid format.');
@@ -274,7 +274,7 @@ class Conversion
      */
     public function setFit($fit)
     {
-        $validFits = ['contain', 'max', 'stretch', 'crop'];
+        $validFits = ['contain', 'max', 'fill', 'stretch', 'crop'];
 
         if (!in_array($fit, $validFits)) {
             throw new InvalidConversionParameter($fit.' is not a valid fit.');
@@ -286,8 +286,8 @@ class Conversion
     }
 
     /**
-     * Set the target rectangle.
-     * Matches with Glide's 'rect'-parameter.
+     * Set the target cropping.
+     * Matches with Glide's 'crop'-parameter.
      *
      * @param int $width
      * @param int $height
@@ -298,7 +298,7 @@ class Conversion
      *
      * @throws InvalidConversionParameter
      */
-    public function setRectangle($width, $height, $x, $y)
+    public function setCrop($width, $height, $x, $y)
     {
         foreach (compact('width', 'height', 'x', 'y') as $name => $value) {
             if (!is_numeric($value)) {
@@ -312,9 +312,28 @@ class Conversion
             }
         }
 
-        $this->setManipulationParameter('rect', sprintf('%s,%s,%s,%s', $width, $height, $x, $y));
+        $this->setManipulationParameter('crop', sprintf('%s,%s,%s,%s', $width, $height, $x, $y));
 
         return $this;
+    }
+
+    /**
+	 * Deprecated
+     * Set the target cropping.
+     * Change Glide's 0.3 'rect'-parameter to 1.0 crop.
+     *
+     * @param int $width
+     * @param int $height
+     * @param int $x
+     * @param int $y
+     *
+     * @return $this
+     *
+     * @throws InvalidConversionParameter
+     */
+    public function setRectangle($width, $height, $x, $y)
+    {
+        return $this->setCrop($width, $height, $x, $y);
     }
 
     /**
