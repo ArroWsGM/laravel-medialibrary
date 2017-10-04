@@ -5,7 +5,7 @@ namespace Spatie\MediaLibrary;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\File;
-use Spatie\Glide\GlideImage;
+use GlideImage;
 use Spatie\MediaLibrary\Conversion\Conversion;
 use Spatie\MediaLibrary\Conversion\ConversionCollection;
 use Spatie\MediaLibrary\Conversion\ConversionCollectionFactory;
@@ -103,10 +103,9 @@ class FileManipulator
         File::copy($copiedOriginalFile, $conversionTempFile);
 
         foreach ($conversion->getManipulations() as $manipulation) {
-            (new GlideImage())
-                ->load($conversionTempFile, $manipulation)
-                ->useAbsoluteSourceFilePath()
-                ->save($conversionTempFile);
+            GlideImage::create($conversionTempFile)
+                      ->modify($manipulation)
+                      ->save($conversionTempFile);
         }
 
         return $conversionTempFile;

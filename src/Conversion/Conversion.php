@@ -72,7 +72,7 @@ class Conversion
     /**
      * Set the manipulations for this conversion.
      *
-     * @param string $manipulations,...
+     * @param mixed $manipulations,...
      *
      * @return $this
      */
@@ -274,7 +274,22 @@ class Conversion
      */
     public function setFit($fit)
     {
-        $validFits = ['contain', 'max', 'fill', 'stretch', 'crop'];
+        $validFits = [
+            'contain',
+            'max',
+            'fill',
+            'stretch',
+            'crop',
+            'crop-top-left',
+            'crop-top',
+            'crop-top-right',
+            'crop-left',
+            'crop-center',
+            'crop-right',
+            'crop-bottom-left',
+            'crop-bottom',
+            'crop-bottom-right',
+        ];
 
         if (!in_array($fit, $validFits)) {
             throw new InvalidConversionParameter($fit.' is not a valid fit.');
