@@ -5,7 +5,7 @@ namespace Spatie\MediaLibrary;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\File;
-use GlideImage;
+use Spatie\MediaLibrary\GlideImage;
 use Spatie\MediaLibrary\Conversion\Conversion;
 use Spatie\MediaLibrary\Conversion\ConversionCollection;
 use Spatie\MediaLibrary\Conversion\ConversionCollectionFactory;
