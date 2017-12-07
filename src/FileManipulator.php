@@ -10,6 +10,7 @@ use Spatie\MediaLibrary\Conversion\Conversion;
 use Spatie\MediaLibrary\Conversion\ConversionCollection;
 use Spatie\MediaLibrary\Conversion\ConversionCollectionFactory;
 use Spatie\MediaLibrary\Events\ConversionHasBeenCompleted;
+use Spatie\MediaLibrary\Events\AllConversionsHasBeenCompleted;
 use Spatie\MediaLibrary\Helpers\File as MediaLibraryFileHelper;
 use Spatie\MediaLibrary\Jobs\PerformConversions;
 use Spatie\PdfToImage\Pdf;
@@ -82,6 +83,8 @@ class FileManipulator
 
             $this->events->fire(new ConversionHasBeenCompleted($media, $conversion));
         }
+
+        $this->events->fire(new AllConversionsHasBeenCompleted($media));
 
         File::deleteDirectory($tempDirectory);
     }
