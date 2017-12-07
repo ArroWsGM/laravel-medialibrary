@@ -84,7 +84,9 @@ class FileManipulator
             $this->events->fire(new ConversionHasBeenCompleted($media, $conversion));
         }
 
-        $this->events->fire(new AllConversionsHasBeenCompleted($media));
+        //TODO: check is there are needs to running entire method on empty collections
+        if ($conversions->count())
+            $this->events->fire(new AllConversionsHasBeenCompleted($media));
 
         File::deleteDirectory($tempDirectory);
     }
